@@ -1,6 +1,4 @@
-﻿# User inputs a timer length or leaves input blank for infinite timer
-# Counts down for specified time or up for infinite
-# Writes timer status to a notepad file every 4 minutes
+﻿# Writes timer status to a notepad file every 4 minutes
 
 ###############################
 
@@ -35,4 +33,25 @@ function Get-Minutes
 
 $timerLength = Get-Minutes
 
-Write-Output $timerLength
+# Open Notepad and create .txt file if not already present.
+
+if ($timerLength -gt 0)
+{
+    for ($i = $timerLength; $i -gt 0; $i--)
+    {
+        Write-Output "Minutes Remaining: $i" # Convert this to send keys to Notepad file.
+        Start-Sleep -Seconds 60
+    }
+
+    Write-Output "Time's Up!"
+}
+else 
+{
+    $i = 0
+    while ($true)
+    {
+        Write-Output "Minutes Counted: $i"  # Convert this to send keys to Notepad file.
+        Start-Sleep -Seconds 60
+        $i++
+    }
+}
