@@ -1,26 +1,13 @@
-﻿# Writes timer status to a notepad file every 4 minutes
+﻿###################################################################
+###################################################################
 
-###############################
-
-# 48 * 300 = 4 hours
-
-# param($numLoops = 48)
-
-# $myshell = New-Object -com "Wscript.Shell"
-
-# for ($i = 0; $i -lt $numLoops; $i++) {
-#        Start-Sleep -Seconds 300
-#        $myshell.sendkeys("+")
-# }
-################################
-
-
+$wshell = New-Object -ComObject "Wscript.Shell"
 
 function Get-Minutes
 {
     try
     {
-        [uint16]$userInput = Read-Host "Enter the number of minutes, or leave blank."
+        [uint16]$userInput = Read-Host "Enter the number of minutes, or leave blank"
     }
     catch [System.Management.Automation.RuntimeException]
     {
@@ -33,16 +20,23 @@ function Get-Minutes
 
 $timerLength = Get-Minutes
 
-# Open Notepad and create .txt file if not already present.
+
+###################################################################
+######################### Shell Version ###########################
+###################################################################
+
+# $wshell.SendKeys("Timer Started~")
 
 if ($timerLength -gt 0)
 {
     for ($i = $timerLength; $i -gt 0; $i--)
     {
-        Write-Output "Minutes Remaining: $i" # Convert this to send keys to Notepad file.
+        $wshell.SendKeys("+")
+        # $wshell.SendKeys("Minutes Remaining: $i~")
+        Write-Output "Minutes Remaining: $i"
         Start-Sleep -Seconds 60
     }
-
+    # $wshell.SendKeys("Time's Up!~")
     Write-Output "Time's Up!"
 }
 else 
@@ -50,8 +44,68 @@ else
     $i = 0
     while ($true)
     {
-        Write-Output "Minutes Counted: $i"  # Convert this to send keys to Notepad file.
+        $wshell.SendKeys("+")
+        # $wshell.SendKeys("Minutes: $i~")
+        Write-Output "Minutes: $i" 
         Start-Sleep -Seconds 60
         $i++
     }
 }
+
+###################################################################
+####################### End Shell Version #########################
+###################################################################
+
+
+###################################################################
+######################## Notepad Version ##########################
+###################################################################
+
+# if (Test-Path ".\timer-log.txt")
+# {
+#     $app = Start-Process notepad ".\timer-log.txt" -PassThru
+#     Start-Sleep -Seconds 1
+# }
+# else
+# {
+#     New-Item -Path . -Name "timer-log.txt" -ItemType "file"
+#     $app = Start-Process notepad ".\timer-log.txt"
+#     Start-Sleep -Seconds 1
+# }
+
+# $wshell.AppActivate($app.Id)
+# Start-Sleep -Seconds 1
+# $wshell.SendKeys("Timer Started~")
+
+# if ($timerLength -gt 0)
+# {
+#     for ($i = $timerLength; $i -gt 0; $i--)
+#     {
+#         $wshell.AppActivate($app.Id)
+#         Start-Sleep -Seconds 1
+#         $wshell.SendKeys("Minutes Remaining: $i~")
+#         Write-Output "Minutes Remaining: $i"
+#         Start-Sleep -Seconds 59
+#     }
+#     $wshell.AppActivate($app.Id)
+#     Start-Sleep -Seconds 1
+#     $wshell.SendKeys("Time's Up!~")
+#     Write-Output "Time's Up!"
+# }
+# else 
+# {
+#     $i = 0
+#     while ($true)
+#     {
+#         $wshell.AppActivate($app.Id)
+#         Start-Sleep -Seconds 1
+#         $wshell.SendKeys("Minutes: $i~")
+#         Write-Output "Minutes: $i" 
+#         Start-Sleep -Seconds 59
+#         $i++
+#     }
+# }
+
+###################################################################
+###################### End Notepad Version ########################
+###################################################################
