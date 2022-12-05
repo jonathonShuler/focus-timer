@@ -7,7 +7,7 @@ function Get-Minutes
 {
     try
     {
-        [uint16]$userInput = Read-Host "Enter the number of minutes, or leave blank"
+        [uint16]$userInput = Read-Host "Enter the number of minutes, or leave blank for default (60)"
     }
     catch [System.Management.Automation.RuntimeException]
     {
@@ -41,15 +41,15 @@ if ($timerLength -gt 0)
 }
 else 
 {
-    $i = 0
-    while ($true)
+    for ($i = 60; $i -gt 0; $i--)
     {
         $wshell.SendKeys("+")
-        # $wshell.SendKeys("Minutes: $i~")
-        Write-Output "Minutes: $i" 
+        # $wshell.SendKeys("Minutes Remaining: $i~")
+        Write-Output "Minutes Remaining: $i"
         Start-Sleep -Seconds 60
-        $i++
     }
+    # $wshell.SendKeys("Time's Up!~")
+    Write-Output "Time's Up!"
 }
 
 ###################################################################
